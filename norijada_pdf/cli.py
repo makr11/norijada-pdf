@@ -21,7 +21,7 @@ def reset_settings(cli_args):
 def list_fonts(cli_args):
     print("Available fonts:")
 
-    for index, font in enumerate(settings.FONTS_DIR, start=1):
+    for index, font in enumerate(os.listdir(settings.FONTS_DIR), start=1):
         print(f"{index}. {font}")
 
 
