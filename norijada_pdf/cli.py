@@ -7,11 +7,11 @@ from settings import settings
 
 
 def plot_cli(cli_args):
-    plot(cli_args.font, cli_args.input_file, rotation=cli_args.rotate)
+    plot(cli_args.font, cli_args.input_file)
 
 
 def arrange_cli(cli_args):
-    arrange(cli_args.font, cli_args.input_file, rotation=cli_args.rotate, unique_identifier=cli_args.file_id)
+    arrange(cli_args.font, cli_args.input_file, unique_identifier=cli_args.file_id)
 
 
 def reset_settings(cli_args):
@@ -52,10 +52,7 @@ def parse_cli():
                           help="Path to txt file with text, each text field to arrange in the pdf has to be on a new line",
                           default="input.txt")
     parser_b.add_argument("-f", "--font",
-                          help="Font name, ex. BebasNeue-Regular.ttf",)
-    parser_b.add_argument("-r", "--rotate",
-                          help="Rotate the nicknames to optimize the space",
-                          action=argparse.BooleanOptionalAction)
+                          help="Font name, ex. BebasNeue-Regular.ttf")
     parser_b.add_argument("-fid", "--file-id",
                           help="Attach unique file id or script will generate one",
                           default=None)
@@ -68,9 +65,6 @@ def parse_cli():
                           default="input.txt")
     parser_c.add_argument("-f", "--font",
                           help="Font name, ex. BebasNeue-Regular.ttf",)
-    parser_c.add_argument("-r", "--rotate",
-                          help="Rotate the nicknames to optimize the space",
-                          action=argparse.BooleanOptionalAction)
     parser_c.add_argument("-fid", "--file-id",
                           help="Attach unique file id or script will generate one",
                           default=None)

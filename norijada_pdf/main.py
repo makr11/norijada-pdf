@@ -10,7 +10,12 @@ from rectpack import newPacker
 from fpdf import FPDF
 
 
-def analyze_nicknames(font: str, font_size: int, list_of_nicknames) -> List[Tuple[int, int, str, bool, int]]:
+def analyze_nicknames(
+        font: str,
+        font_size: int,
+        font_point: int,
+        list_of_nicknames
+) -> List[Tuple[int, int, str, bool, int]]:
     """
     Calculate the width and height of each nickname. If the width is bigger than the height,
     incrementally decrease the font size until the width is smaller than the maximum allowed length.
@@ -24,13 +29,13 @@ def analyze_nicknames(font: str, font_size: int, list_of_nicknames) -> List[Tupl
         adjusted_font_size = font_size
 
         width = math.ceil((pdf.get_string_width(nickname)))
-        height = math.ceil(font_size * settings.ONE_POINT)
+        height = math.ceil(font_size * font_point)
 
         while width > settings.MAX_LENGTH:
             adjusted_font_size -= 10
             pdf.set_font(font, size=adjusted_font_size)
             width = math.ceil((pdf.get_string_width(nickname)))
-            height = math.ceil(adjusted_font_size * settings.ONE_POINT)
+            height = math.ceil(adjusted_font_size * font_point)
 
         nicknames_analyzed.append((width + 4, height + 4, nickname, width >= height, adjusted_font_size))
 
@@ -90,13 +95,13 @@ def create_pdf(packer: newPacker, canvas: tuple, nicknames: List[Tuple[int, int,
         # If enabled packer rotation, rotate the nickname and write it in the bottom left corner
         if rotate and width < height:
             with pdf.rotation(90, x=x, y=y + height):
-                pdf.text(x + 2, y + height + width - 2, nickname)
+                pdf.text(x, y + height + width, nickname)
         else:
-            pdf.text(x + 2, y + height - 2, nickname)
+            pdf.text(x, y + height, nickname)
 
     pdf_filename = Path(settings.PDF_OUTPUT_DIR) / f"nicknames-{file_identifier}.pdf"
     pdf.output(pdf_filename)
-    print(f"PDF saved to {pdf_filename}")
+    print(f"PDF height: {canvas[1]}, saved to: {pdf_filename}")
 
 
 def get_random_string():
@@ -114,32 +119,40 @@ def extract_nicknames(file_path: str) -> List[str]:
     return nicknames
 
 
-def arrange(font: str, file_path: str, rotation: bool = True, unique_identifier: str = None):
+def arrange(font: str, file_path: str, unique_identifier: str = None):
     """
     Create a pdf file with a list of nicknames with minimal space between them
     starting from the top of the left top corner of the page until all the nicknames are written.
     """
-    font_size = settings.FONT_SIZES.get(font, settings.DEFAULT_FONT_SIZE)
+    font_size = settings.FONT_SIZES.get(font, {}).get("size", settings.DEFAULT_FONT_SIZE)
+    font_point = settings.FONT_SIZES.get(font, {}).get("point", settings.ONE_POINT)
 
     list_of_nicknames = extract_nicknames(file_path)
-    nicknames = analyze_nicknames(font, font_size, list_of_nicknames)
-    packer = packing_algorithm(nicknames, rotation=rotation)
+    nicknames = analyze_nicknames(font, font_size, font_point, list_of_nicknames)
+    packer_rotated = packing_algorithm(nicknames, rotation=True)
+    packer = packing_algorithm(nicknames, rotation=False)
 
     file_identifier = get_random_string() if unique_identifier is None else unique_identifier
 
+    create_pdf(packer_rotated, packer_rotated.bin_list()[0], nicknames, font, f"{file_identifier}-rotated")
     create_pdf(packer, packer.bin_list()[0], nicknames, font, file_identifier)
 
 
-def plot(font: str, file_path: str, rotation: bool = True, unique_identifier: str = None):
+def plot(font: str, file_path: str, unique_identifier: str = None):
     """
     Plot the nicknames on the canvas to demonstrate the packing algorithm output.
     """
-    font_size = settings.FONT_SIZES.get(font, settings.DEFAULT_FONT_SIZE)
+    font_size = settings.FONT_SIZES.get(font, settings.DEFAULT_FONT_SIZE).get("size", settings.DEFAULT_FONT_SIZE)
+    font_point = settings.FONT_SIZES.get(font, settings.ONE_POINT).get("point", settings.ONE_POINT)
 
     list_of_nicknames = extract_nicknames(file_path)
-    nicknames = analyze_nicknames(font, font_size, list_of_nicknames)
-    packer = packing_algorithm(nicknames, rotation=rotation)
+    nicknames = analyze_nicknames(font, font_size, font_point, list_of_nicknames)
+    packer_rotated = packing_algorithm(nicknames, rotation=True)
+    packer = packing_algorithm(nicknames, rotation=False)
 
     file_identifier = get_random_string() if unique_identifier is None else unique_identifier
+    plot_width, plot_height = packer_rotated.bin_list()[0]
+    plot_nicknames(packer_rotated, plot_width, plot_height, f"{file_identifier}-rotated")
+
     plot_width, plot_height = packer.bin_list()[0]
     plot_nicknames(packer, plot_width, plot_height, file_identifier)

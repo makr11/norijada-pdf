@@ -26,25 +26,64 @@ class Settings:
         self.INPUT_FILE = Path(os.getcwd()) / "input.txt"
 
         self.FONT_SIZES = {
-            "Bangers-Regular": 195,
-            "BebasNeue-Regular": 195,
-            "BerkshireSwash-Regular": 158,
-            "BlackOpsOne-Regular": 139,
-            "Bungee-Regular": 120,
-            "Courgette-Regular": 156,
-            "Galindo-Regular": 140,
-            "KaushanScript-Regular": 167,
-            "LibreBaskerville-Regular": 140,
-            "Lobster-Regular": 172,
-            "MouseMemoirs-Regular": 223,
-            "Pacifico-Regular": 147,
-            "PatrickHand-Regular": 190,
-            "Ranchers-Regular": 170,
-            "RubikMonoOne-Regular": 100,
-            "RussoOne-Regular": 140,
-            "SigmarOne-Regular": 110,
-            "Staatliches-Regular": 180,
-            "TitanOne-Regular": 130,
+            "Bangers-Regular.ttf": {
+                "size": 195,
+                "point": 0.28
+            },
+            "BebasNeue-Regular.ttf": {
+                "size": 195
+            },
+            "BerkshireSwash-Regular.ttf": {
+                "size": 158
+            },
+            "BlackOpsOne-Regular.ttf": {
+                "size": 139
+            },
+            "Bungee-Regular.ttf": {
+                "size": 120
+            },
+            "Courgette-Regular.ttf": {
+                "size": 156
+            },
+            "Galindo-Regular.ttf": {
+                "size": 140
+            },
+            "KaushanScript-Regular.ttf": {
+                "size": 167
+            },
+            "LibreBaskerville-Regular.ttf": {
+                "size": 140
+            },
+            "Lobster-Regular.ttf": {
+                "size": 172
+            },
+            "MouseMemoirs-Regular.ttf": {
+                "size": 223
+            },
+            "Pacifico-Regular.ttf": {
+                "size": 147
+            },
+            "PatrickHand-Regular.ttf": {
+                "size": 190
+            },
+            "Ranchers-Regular.ttf": {
+                "size": 170
+            },
+            "RubikMonoOne-Regular.ttf": {
+                "size": 100
+            },
+            "RussoOne-Regular.ttf": {
+                "size": 140
+            },
+            "SigmarOne-Regular.ttf": {
+                "size": 110
+            },
+            "Staatliches-Regular.ttf": {
+                "size": 180
+            },
+            "TitanOne-Regular.ttf": {
+                "size": 130
+            },
         }
 
     def __getattribute__(self, name):

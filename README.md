@@ -118,12 +118,7 @@ Kalodont
 Example output pdf file
 [nicknames-prhg-8a.pdf](example%2Fnicknames-prhg-8a.pdf)
 
-Text can also be rotated to optimize the space on the page.
-
-```bash
-norijada-pdf generate-pdf --font BebasNeue-Regular.ttf --file-id prhg-8a-rotated --rotate
-```
-Example output pdf file [nicknames-prhg-8a-rotated.pdf](example%2Fnicknames-prhg-8a-rotated.pdf)
+Example output pdf file rotated [nicknames-prhg-8a-rotated.pdf](example%2Fnicknames-prhg-8a-rotated.pdf)
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
